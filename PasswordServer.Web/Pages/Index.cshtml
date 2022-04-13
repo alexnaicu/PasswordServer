@@ -1,0 +1,62 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Password Server";
+}
+
+<div class="text-left">
+    <p>Fill in the User Id and press Generate to get a new temporary password.</p>
+</div>
+
+<form method="post">
+    <div class="form-group row">
+        <label asp-for="UserId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-2">
+            <input asp-for="UserId" type="text" class="form-control" placeholder="User Id" onkeypress="return isNumberKey(event)" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <input type="submit" class="btn btn-primary" value="Generate" />
+        </div>
+    </div>
+</form>
+
+<div>
+    <div class="form-group row">
+        <label asp-for="LastUserId" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-2">
+            <input type="text" readonly class="form-control" value="@Model.LastUserId">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Password" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-2">
+            <input type="text" readonly class="form-control" value="@Model.Password">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ValidTimeInSeconds" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-2">
+            <input type="text" readonly class="form-control" value="@Model.ValidTimeInSeconds" id="validTimeLeft">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var timeleft = @Model.ValidTimeInSeconds;
+    var validTimer = setInterval(function () {
+        timeleft--;
+        if (timeleft >= 0)
+            document.getElementById("validTimeLeft").value = timeleft;
+        if (timeleft <= 0)
+            clearInterval(validTimer);
+    }, 1000);
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
